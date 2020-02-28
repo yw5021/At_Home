@@ -61,7 +61,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Card.cs" />
+    <Compile Include="Assets\Scripts\Deck.cs" />
+    <Compile Include="Assets\Scripts\InHand.cs" />
+    <Compile Include="Assets\Scripts\Map.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\Room.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/yw502/Desktop/At Home/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
