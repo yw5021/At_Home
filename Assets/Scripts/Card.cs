@@ -8,19 +8,35 @@ public class Card : MonoBehaviour {
 
     struct card_info
     {
-        int card_idx;
         card_category category; //종류
         card_property property; //속성
         string card_name;   //이름
         string card_explain;    //설명
 
         card_effect[] effect; //효과
+
+        public int[] return_effect_idx_arr()
+        {
+            int[] idx_arr = new int[effect.Length];
+
+            for(int i=0; i < effect.Length; i++)
+            {
+                idx_arr[i] = effect[i].return_effect_idx();
+            }
+
+            return idx_arr;
+        }
     }
 
     struct card_effect //카드 효과
     {
         card_effect_param effect_param;     //효과 계열
-        int effect_param_idx;       //효과 번호
+        int effect_idx;       //효과 번호
+
+        public int return_effect_idx()
+        {
+            return effect_idx;
+        }
     }
 
     struct damage_effect_param //데미지 계열 구조
@@ -75,10 +91,35 @@ public class Card : MonoBehaviour {
 
     #endregion
 
-    private void Awake()
+    #region 카드 데이터
+    int card_idx;
+    card_info info;
+
+    #endregion
+
+    #region 카드 데이터 함수
+    void card_init()
     {
-        //카드 효과 정리해서 구조체 만들어서 넣기
+        //매니저쪽에 인덱스 값 별로 카드 구조를 설정 그것을 가져오는걸로
 
     }
+    #endregion
 
+    #region 카드 사용 함수
+
+    void active_card(Card select_card)
+    {
+        //인덱스 값을 활용해서 효과 발동
+        int[] card_effect_idx = select_card.info.return_effect_idx_arr();
+
+        for(int i = 0; i < card_effect_idx.Length; i++)
+        {
+            int effect_idx = card_effect_idx[i];
+
+            //card_effect 클래스를 따로 만들어서 그 클래스를 통해 효과 발동시키는 구조로 변경
+            Debug.Log(effect_idx + "번 효과 발동");
+        }
+    }
+
+    #endregion
 }
