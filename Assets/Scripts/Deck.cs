@@ -6,7 +6,7 @@ public class Deck : MonoBehaviour {
 
     #region 덱 데이터
 
-    Card[] user_deck; //유저가 드로우 가능한 카드
+    Card[] user_deck_arr; //유저가 드로우 가능한 카드
     Card draw_card; //현재 드로우한 카드
 
     int draw_cnt; //드로우 가능한 카드 갯수
@@ -30,10 +30,10 @@ public class Deck : MonoBehaviour {
     }
 
     //밖에서 실행시켜서 랜덤 드로우된 카드 데이터 반환
-    Card draw_event()
+    public Card draw_event()
     {
         //카드 한장 랜덤으로 뽑고
-        bool draw_ok = random_draw(user_deck);
+        bool draw_ok = random_draw(user_deck_arr);
 
         if (draw_ok)
         {

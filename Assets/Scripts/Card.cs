@@ -13,15 +13,15 @@ public class Card : MonoBehaviour {
         string card_name;   //이름
         string card_explain;    //설명
 
-        card_effect[] effect; //효과
+        card_effect[] effect_arr; //효과
 
         public int[] return_effect_idx_arr()
         {
-            int[] idx_arr = new int[effect.Length];
+            int[] idx_arr = new int[effect_arr.Length];
 
-            for(int i=0; i < effect.Length; i++)
+            for(int i=0; i < effect_arr.Length; i++)
             {
-                idx_arr[i] = effect[i].return_effect_idx();
+                idx_arr[i] = effect_arr[i].return_effect_idx();
             }
 
             return idx_arr;
@@ -107,14 +107,14 @@ public class Card : MonoBehaviour {
 
     #region 카드 사용 함수
 
-    void active_card(Card select_card)
+    void active_card()
     {
         //인덱스 값을 활용해서 효과 발동
-        int[] card_effect_idx = select_card.info.return_effect_idx_arr();
+        int[] card_effect_idx_arr = info.return_effect_idx_arr();
 
-        for(int i = 0; i < card_effect_idx.Length; i++)
+        for(int i = 0; i < card_effect_idx_arr.Length; i++)
         {
-            int effect_idx = card_effect_idx[i];
+            int effect_idx = card_effect_idx_arr[i];
 
             //card_effect 클래스를 따로 만들어서 그 클래스를 통해 효과 발동시키는 구조로 변경
             Debug.Log(effect_idx + "번 효과 발동");
