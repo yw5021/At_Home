@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class Room : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    #region 룸 데이터 값
+    
+
+    #endregion
+
 }
