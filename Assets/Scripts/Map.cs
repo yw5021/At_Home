@@ -5,9 +5,9 @@ using UnityEngine;
 public class Map : MonoBehaviour {
 
     #region 맵 데이터 값
-    Room[,,] map_arr = new Room[4,4,2]; //일단 임시로 442 사이즈
-    int[] finish_room_pos_arr = new int[3];
-    int[] now_user_pos_arr = new int[3];
+    Room[] map_arr;
+    Room finish_room_pos_arr;
+    Room now_user_pos_arr;
 
     #endregion
     
@@ -17,18 +17,11 @@ public class Map : MonoBehaviour {
 
     }
 
-    #region 맵 데이터 값 반환 함수
-    public int[] return_now_user_pos()
+    void move_user_pos()
     {
-        return now_user_pos_arr;
+        //맵에서 현재 좌표값 옮겨주고
+
+        //룸쪽에 룸이동 함수 사용
+
     }
-
-    public int[] return_finish_room_pos()
-    {
-        return finish_room_pos_arr;
-    }
-
-    #endregion
-
-
 }
