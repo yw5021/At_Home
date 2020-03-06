@@ -6,8 +6,8 @@ public class Map : MonoBehaviour {
 
     #region 맵 데이터 값
     Room[] map_arr;
-    Room finish_room_pos_arr;
-    Room now_user_pos_arr;
+    int finish_room_idx;
+    int now_user_room_idx;
 
     #endregion
     
@@ -17,11 +17,24 @@ public class Map : MonoBehaviour {
 
     }
 
-    void move_user_pos()
+    void move_user_pos(int room_idx)
     {
         //맵에서 현재 좌표값 옮겨주고
+        now_user_room_idx = room_idx;
+
+        check_finish_room();
 
         //룸쪽에 룸이동 함수 사용
+        Room now_room = map_arr[now_user_room_idx];
 
+        now_room.SendMessage("change_room_output");
+    }
+
+    void check_finish_room()
+    {
+        if(finish_room_idx == now_user_room_idx)
+        {
+            Debug.Log("게임 클리어");
+        }
     }
 }
