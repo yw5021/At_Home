@@ -15,16 +15,18 @@ public class Card : MonoBehaviour {
 
         card_effect[] effect_arr; //효과
 
-        public int[] return_effect_idx_arr()
+        public card_info(card_category _category, card_property _property,string _name,string _explain,card_effect[] _effect_arr)
         {
-            int[] idx_arr = new int[effect_arr.Length];
+            category = _category;
+            property = _property;
+            card_name = _name;
+            card_explain = _explain;
+            effect_arr = _effect_arr;
+        }
 
-            for(int i=0; i < effect_arr.Length; i++)
-            {
-                idx_arr[i] = effect_arr[i].return_effect_idx();
-            }
-
-            return idx_arr;
+        public card_effect[] return_effect_arr()
+        {
+            return effect_arr;
         }
     }
 
@@ -32,6 +34,17 @@ public class Card : MonoBehaviour {
     {
         card_effect_param effect_param;     //효과 계열
         int effect_idx;       //효과 번호
+
+        public card_effect(card_effect_param _effect_param, int _effect_idx)
+        {
+            effect_param = _effect_param;
+            effect_idx = _effect_idx;
+        }
+
+        public card_effect_param return_effect_param()
+        {
+            return effect_param;
+        }
 
         public int return_effect_idx()
         {
@@ -92,7 +105,9 @@ public class Card : MonoBehaviour {
     #endregion
 
     #region 카드 데이터
-    int card_idx;
+    //임시로 public
+    public int card_idx;
+
     card_info info;
 
     #endregion
@@ -100,8 +115,7 @@ public class Card : MonoBehaviour {
     #region 카드 데이터 함수
     void card_init()
     {
-        //매니저쪽에 인덱스 값 별로 카드 구조를 설정 그것을 가져오는걸로
-
+        card_info_init();
     }
     #endregion
 
@@ -110,16 +124,95 @@ public class Card : MonoBehaviour {
     void active_card()
     {
         //인덱스 값을 활용해서 효과 발동
-        int[] card_effect_idx_arr = info.return_effect_idx_arr();
+        card_effect[] card_effect_arr = info.return_effect_arr();
 
-        for(int i = 0; i < card_effect_idx_arr.Length; i++)
+        for(int i = 0; i < card_effect_arr.Length; i++)
         {
-            int effect_idx = card_effect_idx_arr[i];
+            card_effect_param effect_param = card_effect_arr[i].return_effect_param();
+            int effect_idx = card_effect_arr[i].return_effect_idx();
 
             //card_effect 클래스를 따로 만들어서 그 클래스를 통해 효과 발동시키는 구조로 변경
-            Debug.Log(effect_idx + "번 효과 발동");
+            Debug.Log(i + "번째 효과 발동");
+
+            active_card_effect(effect_param,effect_idx);
         }
     }
 
     #endregion
+
+    #region 카드 정보값 처리 함수
+
+    void card_info_init()
+    {
+        Debug.Log(card_idx + "번 카드가 생성됨");
+
+        card_category category = card_category.attack;
+        card_property property = card_property.action;
+        string card_name = "";
+        string card_explain = "";
+
+        card_effect[] effect_arr = { };
+
+        switch (card_idx)
+        {
+            case 0:
+                card_name = "테스트용 0번카드";
+                card_explain = "이 카드는 제작자가 처음 만들었습니다";
+                category = card_category.attack;
+                property = card_property.action;
+
+                effect_arr = new card_effect[2];
+                effect_arr[0] = new card_effect(card_effect_param.damage, 0);
+                effect_arr[1] = new card_effect(card_effect_param.remove, 0);
+                break;
+
+            default:
+                Debug.Log("error 53987 - 잘못된 인덱스 값");
+                break;
+        }
+
+        //card_effect[] ef = { new card_effect(), new card_effect() };
+
+        info = new card_info(category,property,card_name,card_explain,effect_arr);
+    }
+
+    #endregion
+
+    #region 카드 효과 적용 함수
+    void active_card_effect(card_effect_param effect_param, int effect_idx)
+    {
+        switch (effect_param)
+        {
+            case card_effect_param.damage:
+
+                switch (effect_idx)
+                {
+                    case 0:
+                        //0번 카드
+                        Debug.Log("0번 데미지 효과 발동");
+                        break;
+                }
+
+                break;
+
+            case card_effect_param.remove:
+
+                switch (effect_idx)
+                {
+                    case 0:
+                        //0번 카드
+                        Debug.Log("0번 제거 효과 발동");
+                        break;
+                }
+
+                break;
+        }
+    }
+
+    #endregion
+
+    private void Awake()
+    {
+        card_init();
+    }
 }
