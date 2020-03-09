@@ -105,8 +105,8 @@ public class Card : MonoBehaviour {
     #endregion
 
     #region 카드 데이터
-    //임시로 public
-    public int card_idx;
+    int card_idx;
+    public int _card_idx;
 
     card_info info;
 
@@ -115,6 +115,8 @@ public class Card : MonoBehaviour {
     #region 카드 데이터 함수
     void card_init()
     {
+        card_idx = _card_idx;
+
         card_info_init();
     }
     #endregion
@@ -213,6 +215,6 @@ public class Card : MonoBehaviour {
 
     private void Awake()
     {
-        card_init();
+        //card_init();
     }
 }

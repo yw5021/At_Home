@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Room : MonoBehaviour {
 
@@ -9,6 +10,12 @@ public class Room : MonoBehaviour {
     {
         Card apply_card;    //방에 적용된 카드
         int[] connect_room_idx_arr;    //연결된 방
+
+        public room_info(Card _apply_card, int[] _connect_room_idx_arr)
+        {
+            apply_card = _apply_card;
+            connect_room_idx_arr = _connect_room_idx_arr;
+        }
 
         public Card return_apply_card()
         {
@@ -25,6 +32,8 @@ public class Room : MonoBehaviour {
 
     #region 룸 데이터 값
     int room_idx;
+    public int _room_idx;
+
     room_info info;
 
     #endregion
@@ -32,11 +41,44 @@ public class Room : MonoBehaviour {
     #region 룸 함수
     void room_init()
     {
+        room_idx = _room_idx;
 
+        Card apply_card;
+        int[] connect_room_idx_arr;
+        switch (room_idx)
+        {
+            case 0:
+                apply_card = null;
+                connect_room_idx_arr = new int[2] { 1 , 2 };
+
+                info = new room_info(apply_card, connect_room_idx_arr);
+
+                break;
+            case 1:
+                apply_card = null;
+                connect_room_idx_arr = new int[2] { 0, 2 };
+
+                info = new room_info(apply_card, connect_room_idx_arr);
+                break;
+
+            case 2:
+                apply_card = null;
+                connect_room_idx_arr = new int[2] { 0, 1 };
+
+                info = new room_info(apply_card, connect_room_idx_arr);
+                break;
+
+
+            default:
+                Debug.Log("error 62351 - 룸 인덱스값 설정 이상");
+                break;
+        }
     }
 
-    void input_move_room(int path_num)
+    public void move_room(int path_num)
     {
+        Debug.Log(path_num + "번 통로 선택");
+
         //어느 방으로 가는지 탐색 후
         int[] connect_room_idx_arr = info.return_connect_room_idx_arr();
 
@@ -48,15 +90,22 @@ public class Room : MonoBehaviour {
         }
 
         //맵쪽에 이동하는 방 정보 전달
-        GameObject.FindGameObjectWithTag("Obj_Map").SendMessage("move_user_pos", room_idx);
+        GameObject.FindGameObjectWithTag("Map").SendMessage("move_user_pos", room_idx);
     }
 
-    void change_room_output()
+    void change_room_output(GameObject[] go_room_arr)
     {
-        //맵쪽에서 좌표값을 바꿔주고 이쪽에선 ui값 바꿔주는걸로
-        Debug.Log("룸 오브젝트 생성");
+        GameObject go_now_room = go_room_arr[0];
+        GameObject go_prev_room = go_room_arr[1];
+
+        go_prev_room.SetActive(false);
+        go_now_room.SetActive(true);
     }
 
     #endregion
+    private void Awake()
+    {
+        room_init();
+    }
 
 }
