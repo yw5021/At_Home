@@ -7,8 +7,10 @@ public class InHand : MonoBehaviour {
     #region 손패 데이터값
     List<Card> now_hand_card_list = new List<Card>();   //지금 들고있는 카드 배열
     int hand_card_cnt;      //들고있는 카드 수
+    int hand_card_cnt_limit = 5;
 
     Deck user_deck;     //init과정에서 덱 클래스 가져와줄것
+    CardSelect cardSelect;
 
     #endregion
 
@@ -39,32 +41,32 @@ public class InHand : MonoBehaviour {
         active_card_inHand(select_num);
     }
 
-    void active_card_inHand(int num)
+    void active_card_inHand(int select_num)
     {
-        if (num >= now_hand_card_list.Count)
+        if (select_num >= now_hand_card_list.Count)
         {
             Debug.Log("error 34789 - 사용 가능한 카드가 없음");
             return;
         }
 
-        Card temp_card = now_hand_card_list[num];
+        Card temp_card = now_hand_card_list[select_num];
 
-        Debug.Log("손에서 " + num + "번째 카드 효과 발동");
+        Debug.Log("손에서 " + select_num + "번째 카드 효과 발동");
 
         temp_card.SendMessage("active_card");
 
-        delete_card_inHand(num);
+        delete_card_inHand(select_num);
     }
 
-    void delete_card_inHand(int num)
+    void delete_card_inHand(int select_num)
     {
-        Debug.Log("손에서 " + num + "번째 카드 삭제");
+        Debug.Log("손에서 " + select_num + "번째 카드 삭제");
 
-        Card temp_card = now_hand_card_list[num];
+        Card temp_card = now_hand_card_list[select_num];
 
         Destroy(temp_card.gameObject);
 
-        now_hand_card_list.RemoveAt(num);
+        now_hand_card_list.RemoveAt(select_num);
     }
 
     #endregion
@@ -78,9 +80,40 @@ public class InHand : MonoBehaviour {
 
     #endregion
 
+    void abandon_card_inHand(int[] abandon_card_num_arr)
+    {
+        if(hand_card_cnt > hand_card_cnt_limit)
+        {
+            for(int i = 0; i < abandon_card_num_arr.Length; i++)
+            {
+                delete_card_inHand(abandon_card_num_arr[i]);
+            }
+        }
+        else
+        {
+            Debug.Log("손패 수 이상 없음");
+        }
+    }
+
+    void abandon_card_but_event()
+    {
+        int[] temp_card_num_arr = cardSelect.return_select_card_num_arr();
+
+        abandon_card_inHand(temp_card_num_arr);
+    }
+
+    void abandon_card_start_event()
+    {
+        cardSelect.but_func_insert(abandon_card_but_event);
+
+        int select_card_cnt = hand_card_cnt - hand_card_cnt_limit;
+        cardSelect.SendMessage("card_select_start", select_card_cnt);
+    }
+
     void inhand_init()
     {
         user_deck = GameObject.FindGameObjectWithTag("Deck").GetComponent<Deck>();
+        cardSelect = GameObject.FindGameObjectWithTag("CardSelect").GetComponent<CardSelect>();
     }
 
     private void Awake()
