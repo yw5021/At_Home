@@ -50,6 +50,15 @@ public class Map : MonoBehaviour {
         }
     }
 
+    public Room return_now_room()
+    {
+        GameObject go_now_room = go_room_arr[now_user_room_idx];
+
+        Room now_room = go_now_room.GetComponent<Room>();
+
+        return now_room;
+    }
+
     private void Awake()
     {
         map_init();

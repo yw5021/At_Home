@@ -3,32 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Room : MonoBehaviour {
+#region 룸 데이터 구조체
+struct room_info
+{
+    Card apply_card;    //방에 적용된 카드
+    int[] connect_room_idx_arr;    //연결된 방
 
-    #region 룸 데이터 구조체
-    struct room_info
+    public room_info(Card _apply_card, int[] _connect_room_idx_arr)
     {
-        Card apply_card;    //방에 적용된 카드
-        int[] connect_room_idx_arr;    //연결된 방
-
-        public room_info(Card _apply_card, int[] _connect_room_idx_arr)
-        {
-            apply_card = _apply_card;
-            connect_room_idx_arr = _connect_room_idx_arr;
-        }
-
-        public Card return_apply_card()
-        {
-            return apply_card;
-        }
-
-        public int[] return_connect_room_idx_arr()
-        {
-            return connect_room_idx_arr;
-        }
+        apply_card = _apply_card;
+        connect_room_idx_arr = _connect_room_idx_arr;
     }
 
-    #endregion
+    public Card return_apply_card()
+    {
+        return apply_card;
+    }
+
+    public int[] return_connect_room_idx_arr()
+    {
+        return connect_room_idx_arr;
+    }
+}
+
+#endregion
+
+public class Room : MonoBehaviour {
 
     #region 룸 데이터 값
     int room_idx;
@@ -100,6 +100,13 @@ public class Room : MonoBehaviour {
 
         go_prev_room.SetActive(false);
         go_now_room.SetActive(true);
+    }
+
+    void active_apply_card()
+    {
+        Card card = info.return_apply_card();
+
+        card.SendMessage("use_card");
     }
 
     #endregion
