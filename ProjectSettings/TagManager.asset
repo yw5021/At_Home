@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Deck
   - Map
+  - CardSelect
   layers:
   - Default
   - TransparentFX

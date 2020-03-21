@@ -80,13 +80,13 @@ public class InHand : MonoBehaviour {
 
     #endregion
 
-    void abandon_card_inHand(int[] abandon_card_num_arr)
+    void abandon_card_inHand(List<int> abandon_card_num_list)
     {
         if(hand_card_cnt > hand_card_cnt_limit)
         {
-            for(int i = 0; i < abandon_card_num_arr.Length; i++)
+            for(int i = 0; i < abandon_card_num_list.Count; i++)
             {
-                delete_card_inHand(abandon_card_num_arr[i]);
+                delete_card_inHand(abandon_card_num_list[i]);
             }
         }
         else
@@ -97,17 +97,15 @@ public class InHand : MonoBehaviour {
 
     void abandon_card_but_event()
     {
-        int[] temp_card_num_arr = cardSelect.return_select_card_num_arr();
+        List<int> temp_card_num_list = cardSelect.return_select_card_num_list();
 
-        abandon_card_inHand(temp_card_num_arr);
+        abandon_card_inHand(temp_card_num_list);
     }
 
     void abandon_card_start_event()
     {
-        cardSelect.but_func_insert(abandon_card_but_event);
-
         int select_card_cnt = hand_card_cnt - hand_card_cnt_limit;
-        cardSelect.SendMessage("card_select_start", select_card_cnt);
+        cardSelect.card_select_start(abandon_card_but_event,select_card_cnt);
     }
 
     void inhand_init()
