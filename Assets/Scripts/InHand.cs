@@ -53,7 +53,7 @@ public class InHand : MonoBehaviour {
 
         Debug.Log("손에서 " + select_num + "번째 카드 효과 발동");
 
-        temp_card.SendMessage("active_card");
+        temp_card.SendMessage("use_card");
 
         delete_card_inHand(select_num);
     }
@@ -67,6 +67,11 @@ public class InHand : MonoBehaviour {
         Destroy(temp_card.gameObject);
 
         now_hand_card_list.RemoveAt(select_num);
+    }
+
+    public void conf_active_card_inHand()
+    {
+        GameManager.gameManager.SendMessage("progress_wait_end");
     }
 
     #endregion
@@ -105,7 +110,9 @@ public class InHand : MonoBehaviour {
     void abandon_card_start_event()
     {
         int select_card_cnt = hand_card_cnt - hand_card_cnt_limit;
-        cardSelect.card_select_start(abandon_card_but_event,select_card_cnt);
+
+        if(select_card_cnt > 0)
+            cardSelect.card_select_start(abandon_card_but_event,select_card_cnt);
     }
 
     void inhand_init()

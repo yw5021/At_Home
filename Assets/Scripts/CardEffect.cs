@@ -33,6 +33,9 @@ public class CardEffect : MonoBehaviour {
                 active_card_effect(effect_idx);
             }
         }
+
+        calc_card_effect();
+        result_card_effect();
     }
 
     #endregion
