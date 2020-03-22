@@ -8,12 +8,14 @@ public class Map : MonoBehaviour {
     public GameObject[] go_room_arr;
 
     //Room[] map_arr;
-    int finish_room_idx;
+    int finish_room_idx = 100;
     int now_user_room_idx;
 
     bool is_active_map = false;
+
+    List<int> user_path_room_idx_list = new List<int>();
     #endregion
-    
+
     void move_map_start()
     {
         is_active_map = true;
@@ -26,6 +28,8 @@ public class Map : MonoBehaviour {
         go_room_arr[0].SetActive(true);
 
         now_user_room_idx = 0;
+
+        user_path_room_idx_list.Add(now_user_room_idx);
     }
 
     void move_user_pos(int room_idx)
@@ -45,6 +49,8 @@ public class Map : MonoBehaviour {
 
         //맵에서 현재 좌표값 옮겨주고
         now_user_room_idx = room_idx;
+
+        user_path_room_idx_list.Add(now_user_room_idx);
 
         check_finish_room();
 
@@ -72,6 +78,30 @@ public class Map : MonoBehaviour {
         Room now_room = go_now_room.GetComponent<Room>();
 
         return now_room;
+    }
+
+    void forced_move_room(int turn)
+    {
+        int path_room_idx_list_cnt = user_path_room_idx_list.Count;
+        int turn_cnt_calc = turn + 1;
+
+        if (path_room_idx_list_cnt - turn_cnt_calc > 0)
+        {
+            int forced_move_room_idx = user_path_room_idx_list[path_room_idx_list_cnt - turn_cnt_calc];
+
+            for(int i = 0; i < turn_cnt_calc; i++)
+            {
+                user_path_room_idx_list.RemoveAt(path_room_idx_list_cnt - turn_cnt_calc + i);
+            }
+
+            move_user_pos(forced_move_room_idx);
+        }
+        else
+        {
+            user_path_room_idx_list.Clear();
+            //첫방으로
+            move_user_pos(0);
+        }
     }
 
     private void Awake()

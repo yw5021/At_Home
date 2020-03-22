@@ -12,12 +12,35 @@ public class InHand : MonoBehaviour {
     int hand_card_cnt;      //들고있는 카드 수
     int hand_card_cnt_limit = 5;
 
+    bool is_ban_use_card = false;
+    int ban_use_card_turn;
+
     bool is_active_inhand = false;
 
     Deck user_deck;     //init과정에서 덱 클래스 가져와줄것
     CardSelect cardSelect;
 
     #endregion
+
+    void turn_end()
+    {
+        if (is_ban_use_card)
+        {
+            ban_use_card_turn--;
+
+            if(ban_use_card_turn <= 0)
+            {
+                is_ban_use_card = false;
+            }
+        }
+    }
+
+    void ban_use_card(int turn)
+    {
+        is_ban_use_card = true;
+
+        ban_use_card_turn = turn;
+    }
 
     #region 손패 카드 드로우 함수
 
@@ -94,6 +117,8 @@ public class InHand : MonoBehaviour {
 
     void select_card_start()
     {
+        //이쪽 부근 코드 나중에 정리(구현)
+
         is_active_inhand = true;
 
         int now_card_cnt = now_hand_card_list.Count;
@@ -165,6 +190,7 @@ public class InHand : MonoBehaviour {
         inhand_init();
     }
 
+    //나중에 뺼것(구현)
     private void Start()
     {
         draw_card_inHand();

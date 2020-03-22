@@ -7,10 +7,12 @@ public class GameManager : MonoBehaviour {
     enum game_phase
     {
         none = 0,
-        enter = 1,  //진입
-        action = 2, //행동
-        maintenence = 3,    //정비
-        departure = 4   //이탈
+        turn_start = 1,
+        enter = 2,  //진입
+        action = 3, //행동
+        maintenence = 4,    //정비
+        departure = 5,   //이탈
+        turn_end = 6
     }
 
     public static GameManager gameManager;

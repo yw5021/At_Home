@@ -10,6 +10,28 @@ public class Player : MonoBehaviour {
     int now_hp;
     public int _now_hp;
 
+    bool is_ban_move = false;
+    int ban_move_turn_cnt;
+
+    void turn_end()
+    {
+        if (is_ban_move)
+        {
+            ban_move_turn_cnt--;
+
+            if(ban_move_turn_cnt <= 0)
+            {
+                is_ban_move = false;
+            }
+        }
+    }
+
+    void ban_move(int turn)
+    {
+        is_ban_move = true;
+
+        ban_move_turn_cnt = turn;
+    }
 
     #region 체력 데이터 증감
     void Restore_hp(int Recovery)
@@ -26,11 +48,6 @@ public class Player : MonoBehaviour {
         check_hp();
 
         output_hp();
-    }
-
-    void test()
-    {
-        Apply_damage(50);
     }
     #endregion
     

@@ -84,10 +84,12 @@ public class Room : MonoBehaviour {
 
         int room_idx = connect_room_idx_arr[path_num];
 
+        /*
         if(room_idx == null)
         {
             Debug.Log("error 51261 - 연결된 방 인덱스값 오류");
         }
+        */
 
         //맵쪽에 이동하는 방 정보 전달
         GameObject.FindGameObjectWithTag("Map").SendMessage("move_user_pos", room_idx);

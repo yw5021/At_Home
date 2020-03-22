@@ -101,12 +101,22 @@ public class Deck : MonoBehaviour {
 
         output_draw_cnt();
 
-        //임시로 한칸만
+        //임시로 한칸만(구현)
         user_deck_idx_arr = new int[1];
         for (int i = 0; i < user_deck_idx_arr.Length; i++)
         {
             user_deck_idx_arr[i] = i;
         }
+    }
+
+    void deck_apply_damage(int Damage)
+    {
+        draw_cnt -= Damage;
+
+        check_draw_cnt();
+
+        //바뀐 데이터값 출력(구현)
+
     }
 
     private void Awake()

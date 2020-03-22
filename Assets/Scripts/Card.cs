@@ -22,6 +22,26 @@ public struct card_info
         effect_idx_arr = _effect_idx_arr;
     }
 
+    public string return_card_name()
+    {
+        return card_name;
+    }
+
+    public string return_card_explain()
+    {
+        return card_explain;
+    }
+
+    public card_category return_card_category()
+    {
+        return category;
+    }
+
+    public card_property return_card_property()
+    {
+        return property;
+    }
+
     public int[] return_effect_idx_arr()
     {
         return effect_idx_arr;
@@ -108,7 +128,7 @@ public class Card : MonoBehaviour {
 
         Card card = gameObject.GetComponent<Card>();
 
-        cardEffect.SendMessage("active_card_list_add", card);
+        cardEffect.SendMessage("active_card_enqueue", card);
     }
 
     public card_info return_card_info()
