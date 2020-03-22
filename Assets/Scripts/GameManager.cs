@@ -27,6 +27,17 @@ public class GameManager : MonoBehaviour {
     void Awake()
     {
         gameManager = this;
+
+        map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
+        inhand = GameObject.FindGameObjectWithTag("InHand").GetComponent<InHand>();
+        cardEffect = GameObject.FindGameObjectWithTag("CardEffect").GetComponent<CardEffect>();
+    }
+
+    public void test_game_start()
+    {
+        now_game_phase = game_phase.enter;
+
+        phase_progress();
     }
 
     void phase_progress()
@@ -36,6 +47,9 @@ public class GameManager : MonoBehaviour {
             case game_phase.enter:
                 //방에 입장 (값 초기화)
                 next_game_phase = game_phase.action;
+
+                //일단 임시로
+                next_phase();
                 break;
 
             case game_phase.action:
@@ -58,26 +72,29 @@ public class GameManager : MonoBehaviour {
     #region 각 페이즈별 코루틴
     IEnumerator action_phase()
     {
+        next_game_phase = game_phase.maintenence;
+
         //방에 적용된 카드 사용
         Room now_room = map.return_now_room();
 
         now_room.SendMessage("active_apply_card");
 
         //핸드쪽에 카드 사용 가능하게 해줌
-
+        inhand.SendMessage("select_card_start");
 
         yield return StartCoroutine("progress_wait");
 
         cardEffect.SendMessage("active_card");
 
-        next_game_phase = game_phase.maintenence;
         yield return null;
     }
 
     IEnumerator maintenence_phase()
     {
+        next_game_phase = game_phase.departure;
+
         //3장 드로우
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             inhand.SendMessage("draw_card_inHand");
         }
@@ -85,16 +102,15 @@ public class GameManager : MonoBehaviour {
         //버리기 이벤트 실행
         inhand.SendMessage("abandon_card_start_event");
 
-        next_game_phase = game_phase.departure;
         yield return null;
     }
 
     IEnumerator departure_phase()
     {
-        //방 이동 가능하게 해줌
-
-
         next_game_phase = game_phase.enter;
+
+        //방 이동 가능하게 해줌
+        map.SendMessage("move_map_start");
         yield return null;
     }
     #endregion
@@ -109,6 +125,7 @@ public class GameManager : MonoBehaviour {
 
     void progress_wait_end()
     {
+        Debug.Log("대기 끝");
         progress_waiting = false;
     }
     #endregion
@@ -116,6 +133,8 @@ public class GameManager : MonoBehaviour {
     void next_phase()
     {
         now_game_phase = next_game_phase;
+
+        Debug.Log("페이즈 시작 - " + now_game_phase);
 
         phase_progress();
     }

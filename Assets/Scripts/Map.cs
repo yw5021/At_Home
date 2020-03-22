@@ -11,8 +11,14 @@ public class Map : MonoBehaviour {
     int finish_room_idx;
     int now_user_room_idx;
 
+    bool is_active_map = false;
     #endregion
     
+    void move_map_start()
+    {
+        is_active_map = true;
+    }
+
     //맵 구성해주는 함수
     void map_init()
     {
@@ -24,6 +30,12 @@ public class Map : MonoBehaviour {
 
     void move_user_pos(int room_idx)
     {
+        if (!is_active_map)
+        {
+            Debug.Log("현재 이동 불가");
+            return;
+        }
+
         Debug.Log(room_idx + "번 방으로 이동");
 
         GameObject go_prev_room = go_room_arr[now_user_room_idx];
@@ -40,6 +52,9 @@ public class Map : MonoBehaviour {
         Room now_room = go_prev_room.GetComponent<Room>();
 
         now_room.SendMessage("change_room_output", go_temp_room_arr);
+
+        is_active_map = false;
+        GameManager.gameManager.SendMessage("next_phase");
     }
 
     void check_finish_room()

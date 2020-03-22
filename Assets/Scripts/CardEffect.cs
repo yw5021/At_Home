@@ -36,6 +36,9 @@ public class CardEffect : MonoBehaviour {
 
         calc_card_effect();
         result_card_effect();
+
+        
+        GameManager.gameManager.SendMessage("next_phase");
     }
 
     #endregion

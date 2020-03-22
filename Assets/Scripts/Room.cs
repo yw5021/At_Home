@@ -106,6 +106,12 @@ public class Room : MonoBehaviour {
     {
         Card card = info.return_apply_card();
 
+        if(card == null)
+        {
+            Debug.Log("방에 적용된 카드 없음");
+            return;
+        }
+
         card.SendMessage("use_card");
     }
 

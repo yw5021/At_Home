@@ -7,6 +7,8 @@ TagManager:
   - Deck
   - Map
   - CardSelect
+  - CardEffect
+  - InHand
   layers:
   - Default
   - TransparentFX

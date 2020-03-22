@@ -11,6 +11,8 @@ public class CardSelect : MonoBehaviour {
     public Button[] select_card_but_arr;
     public Button[] deselect_card_but_arr;
 
+    public GameObject card_select_panel;
+
     List<int> select_card_num_list;
     int select_card_cnt;
 
@@ -30,7 +32,7 @@ public class CardSelect : MonoBehaviour {
         {
             select_card_but_arr[i].gameObject.SetActive(true);
         }
-        for (int j = 0; j < select_card_but_arr.Length; j++)
+        for (int j = 0; j < deselect_card_but_arr.Length; j++)
         {
             deselect_card_but_arr[j].gameObject.SetActive(false);
         }
@@ -52,6 +54,7 @@ public class CardSelect : MonoBehaviour {
     void delete_listener()
     {
         confirm_but.onClick.RemoveAllListeners();
+        card_select_panel.SetActive(false);
     }
 
     void but_func_insert(System.Action func)
@@ -67,11 +70,24 @@ public class CardSelect : MonoBehaviour {
         //시작할 때 데이터값 정리
         select_card_cnt = card_cnt;
 
+        now_select_card_cnt = 0;
+
         //select_card_num_arr = new int[select_card_cnt];
         select_card_num_list = new List<int>();
 
         //선택 완료 버튼에 이벤트 넣어줌
         but_func_insert(func);
+
+        for (int i = 0; i < select_card_but_arr.Length; i++)
+        {
+            select_card_but_arr[i].gameObject.SetActive(true);
+        }
+        for (int j = 0; j < deselect_card_but_arr.Length; j++)
+        {
+            deselect_card_but_arr[j].gameObject.SetActive(false);
+        }
+
+        card_select_panel.SetActive(true);
     }
 
     public void select_card(int select_card_num)

@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InHand : MonoBehaviour {
 
     #region 손패 데이터값
+    public Button[] active_card_but_arr;
+
     List<Card> now_hand_card_list = new List<Card>();   //지금 들고있는 카드 배열
     int hand_card_cnt;      //들고있는 카드 수
     int hand_card_cnt_limit = 5;
+
+    bool is_active_inhand = false;
 
     Deck user_deck;     //init과정에서 덱 클래스 가져와줄것
     CardSelect cardSelect;
@@ -36,6 +41,12 @@ public class InHand : MonoBehaviour {
     #region 손패 카드 사용 함수
     public void active_card_select_inHand(int select_num)
     {
+        if (!is_active_inhand)
+        {
+            Debug.Log("현재 카드 사용 불가");
+            return;
+        }
+
         Debug.Log("손에서 " + select_num + "번째 카드 사용");
 
         active_card_inHand(select_num);
@@ -67,10 +78,13 @@ public class InHand : MonoBehaviour {
         Destroy(temp_card.gameObject);
 
         now_hand_card_list.RemoveAt(select_num);
+
+        hand_card_cnt--;
     }
 
     public void conf_active_card_inHand()
     {
+        is_active_inhand = false;
         GameManager.gameManager.SendMessage("progress_wait_end");
     }
 
@@ -78,9 +92,25 @@ public class InHand : MonoBehaviour {
 
     #region 손패 카드 출력 함수
 
-    void output_inHand()
+    void select_card_start()
     {
-        //카드 데이터 출력 함수
+        is_active_inhand = true;
+
+        int now_card_cnt = now_hand_card_list.Count;
+
+        Debug.Log("손에 " + now_card_cnt + "장 있음");
+
+        for (int i = 0; i < hand_card_cnt_limit; i++)
+        {
+            active_card_but_arr[i].gameObject.SetActive(false);
+        }
+
+        for (int j = 0; j < now_card_cnt; j++)
+        {
+            active_card_but_arr[j].gameObject.SetActive(true);
+        }
+
+
     }
 
     #endregion
@@ -98,6 +128,8 @@ public class InHand : MonoBehaviour {
         {
             Debug.Log("손패 수 이상 없음");
         }
+
+        GameManager.gameManager.SendMessage("next_phase");
     }
 
     void abandon_card_but_event()
@@ -111,8 +143,15 @@ public class InHand : MonoBehaviour {
     {
         int select_card_cnt = hand_card_cnt - hand_card_cnt_limit;
 
-        if(select_card_cnt > 0)
-            cardSelect.card_select_start(abandon_card_but_event,select_card_cnt);
+        if (select_card_cnt > 0)
+        {
+            Debug.Log(select_card_cnt + "장 버리기 이벤트 실행");
+            cardSelect.card_select_start(abandon_card_but_event, select_card_cnt);
+        }
+        else
+        {
+            GameManager.gameManager.SendMessage("next_phase");
+        }
     }
 
     void inhand_init()
@@ -124,5 +163,12 @@ public class InHand : MonoBehaviour {
     private void Awake()
     {
         inhand_init();
+    }
+
+    private void Start()
+    {
+        draw_card_inHand();
+        draw_card_inHand();
+        draw_card_inHand();
     }
 }
