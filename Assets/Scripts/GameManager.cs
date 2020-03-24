@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour {
     Map map;
     InHand inhand;
     CardEffect cardEffect;
+    Player player;
+    Deck deck;
 
     bool progress_waiting = false;
 
@@ -33,6 +35,8 @@ public class GameManager : MonoBehaviour {
         map = GameObject.FindGameObjectWithTag("Map").GetComponent<Map>();
         inhand = GameObject.FindGameObjectWithTag("InHand").GetComponent<InHand>();
         cardEffect = GameObject.FindGameObjectWithTag("CardEffect").GetComponent<CardEffect>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent <Player>();
+        deck = GameObject.FindGameObjectWithTag("Deck").GetComponent<Deck>();
     }
 
     public void test_game_start()
@@ -144,5 +148,35 @@ public class GameManager : MonoBehaviour {
     void gameover()
     {
         Debug.Log("게임 오버");
+    }
+
+    void message_player_damage(int damage)
+    {
+        player.SendMessage("Apply_damage", damage);
+    }
+
+    void message_player_heal(int heal)
+    {
+        player.SendMessage("Restore_hp", heal);
+    }
+
+    void message_deck_damage(int damage)
+    {
+        deck.SendMessage("deck_apply_damage", damage);
+    }
+
+    void message_forced_move(int turn)
+    {
+        map.SendMessage("forced_move_room", turn);
+    }
+
+    void message_ban_move(int turn)
+    {
+        player.SendMessage("ban_move", turn);
+    }
+
+    void message_ban_use_card(int turn)
+    {
+        inhand.SendMessage("ban_use_card", turn);
     }
 }

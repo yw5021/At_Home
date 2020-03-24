@@ -45,7 +45,7 @@ public class CardEffect : MonoBehaviour {
             {
                 int effect_idx = card_effect_idx_arr[j];
 
-                Debug.Log(j + "번째 효과 발동");
+                Debug.Log(j + "번째 효과 발동 : " + effect_idx + "번 효과");
 
                 active_card_effect(effect_idx);
             }
@@ -203,7 +203,38 @@ public class CardEffect : MonoBehaviour {
     //실제 효과들이 적용되는 부분
     void result_card_effect()
     {
+        if(player_damage > player_heal)
+        {
+            int calc_damage = player_damage - player_heal;
 
+            GameManager.gameManager.SendMessage("message_player_damage", calc_damage);
+        }
+        else if(player_heal > player_damage)
+        {
+            int calc_heal = player_heal - player_damage;
+
+            GameManager.gameManager.SendMessage("message_player_heal", calc_heal);
+        }
+
+        if(deck_damage > 0)
+        {
+            GameManager.gameManager.SendMessage("message_deck_damage", deck_damage);
+        }
+
+        if(forced_move_turn > 0)
+        {
+            GameManager.gameManager.SendMessage("message_forced_move", forced_move_turn);
+        }
+
+        if(ban_move_turn > 0)
+        {
+            GameManager.gameManager.SendMessage("message_ban_move", ban_move_turn);
+        }
+
+        if(ban_use_card_turn > 0)
+        {
+            GameManager.gameManager.SendMessage("message_ban_use_card", ban_use_card_turn);
+        }
     }
     #endregion
 }

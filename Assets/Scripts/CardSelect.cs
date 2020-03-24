@@ -51,7 +51,7 @@ public class CardSelect : MonoBehaviour {
     }
 
     #region 선택 완료 버튼 함수
-    void delete_listener()
+    void confirm_but_event()
     {
         confirm_but.onClick.RemoveAllListeners();
         card_select_panel.SetActive(false);
@@ -61,7 +61,7 @@ public class CardSelect : MonoBehaviour {
     {
         //버튼에 받은 함수포인터로 클릭 이벤트 지정
         confirm_but.onClick.AddListener(() => func());
-        confirm_but.onClick.AddListener(() => delete_listener());
+        confirm_but.onClick.AddListener(() => confirm_but_event());
     }
     #endregion
 

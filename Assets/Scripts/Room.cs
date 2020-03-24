@@ -52,8 +52,8 @@ public class Room : MonoBehaviour {
                 connect_room_idx_arr = new int[2] { 1 , 2 };
 
                 info = new room_info(apply_card, connect_room_idx_arr);
-
                 break;
+
             case 1:
                 apply_card = null;
                 connect_room_idx_arr = new int[2] { 0, 2 };
