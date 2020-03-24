@@ -13,6 +13,11 @@ public class Player : MonoBehaviour {
     bool is_ban_move = false;
     int ban_move_turn_cnt;
 
+    void turn_start()
+    {
+        GameManager.gameManager.SendMessage("now_player_state", is_ban_move);
+    }
+
     void turn_end()
     {
         if (is_ban_move)

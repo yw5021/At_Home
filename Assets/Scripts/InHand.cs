@@ -22,6 +22,11 @@ public class InHand : MonoBehaviour {
 
     #endregion
 
+    void turn_start()
+    {
+        GameManager.gameManager.SendMessage("now_inhand_state", is_ban_use_card);
+    }
+
     void turn_end()
     {
         if (is_ban_use_card)

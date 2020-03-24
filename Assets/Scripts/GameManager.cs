@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour {
 
     bool progress_waiting = false;
 
+    bool is_ban_move = false;
+    bool is_ban_use_card = false;
+
     void Awake()
     {
         gameManager = this;
@@ -41,7 +44,7 @@ public class GameManager : MonoBehaviour {
 
     public void test_game_start()
     {
-        now_game_phase = game_phase.enter;
+        now_game_phase = game_phase.turn_start;
 
         phase_progress();
     }
@@ -50,6 +53,10 @@ public class GameManager : MonoBehaviour {
     {
         switch (now_game_phase)
         {
+            case game_phase.turn_start:
+                StartCoroutine("turn_start_phase");
+                break;
+
             case game_phase.enter:
                 //방에 입장 (값 초기화)
                 next_game_phase = game_phase.action;
@@ -72,10 +79,27 @@ public class GameManager : MonoBehaviour {
                 //다음 방으로 이동 (이동할 방향 선택, 맵에서 좌표 이동)
                 StartCoroutine("departure_phase");
                 break;
+
+            case game_phase.turn_end:
+                StartCoroutine("turn_end_phase");
+                break;
         }
     }
 
     #region 각 페이즈별 코루틴
+
+    IEnumerator turn_start_phase()
+    {
+        next_game_phase = game_phase.enter;
+
+        player.SendMessage("turn_start");
+        inhand.SendMessage("turn_start");
+
+        //일단 임시로
+        next_phase();
+        yield return null;
+    }
+
     IEnumerator action_phase()
     {
         next_game_phase = game_phase.maintenence;
@@ -86,9 +110,16 @@ public class GameManager : MonoBehaviour {
         now_room.SendMessage("active_apply_card");
 
         //핸드쪽에 카드 사용 가능하게 해줌
-        inhand.SendMessage("select_card_start");
+        if (!is_ban_use_card)
+        {
+            inhand.SendMessage("select_card_start");
 
-        yield return StartCoroutine("progress_wait");
+            yield return StartCoroutine("progress_wait");
+        }
+        else
+        {
+            Debug.Log("카드 사용 불가로 인해 카드 사용이 금지됨");
+        }
 
         cardEffect.SendMessage("active_card");
 
@@ -113,10 +144,30 @@ public class GameManager : MonoBehaviour {
 
     IEnumerator departure_phase()
     {
-        next_game_phase = game_phase.enter;
+        next_game_phase = game_phase.turn_end;
 
         //방 이동 가능하게 해줌
-        map.SendMessage("move_map_start");
+        if (!is_ban_move)
+        {
+            map.SendMessage("move_map_start");
+        }
+        else
+        {
+            Debug.Log("이동불가로 인해 이동 할 수 없음");
+            next_phase();
+        }
+        yield return null;
+    }
+
+    IEnumerator turn_end_phase()
+    {
+        next_game_phase = game_phase.turn_start;
+
+        player.SendMessage("turn_end");
+        inhand.SendMessage("turn_end");
+
+        //일단 임시로
+        next_phase();
         yield return null;
     }
     #endregion
@@ -178,5 +229,15 @@ public class GameManager : MonoBehaviour {
     void message_ban_use_card(int turn)
     {
         inhand.SendMessage("ban_use_card", turn);
+    }
+
+    void now_player_state(bool move_ban)
+    {
+        is_ban_move = move_ban;
+    }
+
+    void now_inhand_state(bool use_card_ban)
+    {
+        is_ban_use_card = use_card_ban;
     }
 }

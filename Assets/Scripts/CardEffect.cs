@@ -20,20 +20,23 @@ public class CardEffect : MonoBehaviour {
     #region 카드 사용 함수
     void active_card_enqueue(Card card)
     {
+        Debug.Log(card.name + "가 추가됨");
         active_card_queue.Enqueue(card);
     }
 
     void active_card()
     {
-        for (int i = 0; i < active_card_queue.Count; i++)
+        int now_cnt = active_card_queue.Count;
+
+        for (int i = 0; i < now_cnt; i++)
         {
+            Debug.Log(active_card_queue.Count + "장 있음");
+
             Card card = active_card_queue.Dequeue();
 
             card_info info = card.return_card_info();
 
-            bool ban_check = effect_ban_check(info);
-
-            if (ban_check)
+            if (effect_ban_check(info))
             {
                 continue;
             }
