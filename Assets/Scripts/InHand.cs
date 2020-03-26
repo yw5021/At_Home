@@ -9,6 +9,7 @@ public class InHand : MonoBehaviour {
     public Button[] active_card_but_arr;
 
     List<Card> now_hand_card_list = new List<Card>();   //지금 들고있는 카드 배열
+    List<int> active_card_num_list = new List<int>();
     int hand_card_cnt;      //들고있는 카드 수
     int hand_card_cnt_limit = 5;
 
@@ -77,7 +78,20 @@ public class InHand : MonoBehaviour {
 
         Debug.Log("손에서 " + select_num + "번째 카드 사용");
 
-        active_card_inHand(select_num);
+        active_card_num_list.Add(select_num);
+    }
+
+    public void cancel_active_card_select_inHand(int select_num)
+    {
+        if (!active_card_num_list.Contains(select_num))
+        {
+            Debug.Log("error 65248 - 사용한 카드가 아님 버튼인자 확인");
+            return;
+        }
+
+        Debug.Log("손에서 " + select_num + "번째 카드 사용취소");
+
+        active_card_num_list.Remove(select_num);
     }
 
     void active_card_inHand(int select_num)
@@ -90,11 +104,9 @@ public class InHand : MonoBehaviour {
 
         Card temp_card = now_hand_card_list[select_num];
 
-        Debug.Log("손에서 " + select_num + "번째 카드 효과 발동");
+        Debug.Log("손에서 " + select_num + "번째 카드 사용처리 성공");
 
         temp_card.SendMessage("use_card");
-
-        delete_card_inHand(select_num);
     }
 
     void delete_card_inHand(int select_num)
@@ -113,6 +125,19 @@ public class InHand : MonoBehaviour {
     public void conf_active_card_inHand()
     {
         is_active_inhand = false;
+
+        for (int i = 0; i < active_card_num_list.Count; i++)
+        {
+            active_card_inHand(active_card_num_list[i]);
+        }
+
+        for (int j = 0; j < active_card_num_list.Count; j++)
+        {
+            delete_card_inHand(active_card_num_list[j]);
+        }
+
+        active_card_num_list = new List<int>();
+
         GameManager.gameManager.SendMessage("progress_wait_end");
     }
 

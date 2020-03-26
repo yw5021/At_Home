@@ -9,6 +9,7 @@ TagManager:
   - CardSelect
   - CardEffect
   - InHand
+  - CardCreator
   layers:
   - Default
   - TransparentFX

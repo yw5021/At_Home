@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Deck : MonoBehaviour {
 
     #region 덱 데이터
-    public GameObject card_prefab;
     public Text draw_cnt_text;
 
     int[] user_deck_idx_arr; //유저가 드로우 가능한 카드
@@ -15,6 +14,8 @@ public class Deck : MonoBehaviour {
     int draw_cnt; //드로우 가능한 카드 갯수
     public int _draw_cnt;
 
+    CardCreator cardCreator;
+
     #endregion
 
     #region 드로우 함수
@@ -22,21 +23,13 @@ public class Deck : MonoBehaviour {
     bool random_draw(int[] deck)
     {
         int deck_card_cnt;
-        int draw_card_num;
+        int draw_card_idx;
 
         deck_card_cnt = deck.Length;
 
-        draw_card_num = Random.Range(0, deck_card_cnt);
+        draw_card_idx = deck[Random.Range(0, deck_card_cnt)];
 
-        //카드 오브젝트 생성해서
-        GameObject go_draw_card = Instantiate(card_prefab);
-
-        draw_card = go_draw_card.GetComponent<Card>();
-
-        //카드 인덱스값 넣어주고 init 돌려줌
-        draw_card.GetComponent<Card>()._card_idx = deck[draw_card_num];
-
-        draw_card.SendMessage("card_init");
+        draw_card = cardCreator.Card_Create(draw_card_idx);
 
         return true;    //드로우에 성공하면 true
     }
@@ -122,5 +115,7 @@ public class Deck : MonoBehaviour {
     private void Awake()
     {
         deck_init();
+
+        cardCreator = GameObject.FindGameObjectWithTag("CardCreator").GetComponent<CardCreator>();
     }
 }
