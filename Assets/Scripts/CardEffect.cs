@@ -17,6 +17,26 @@ public class CardEffect : MonoBehaviour {
     int ban_move_turn = 0;
     int ban_use_card_turn = 0;
 
+    void Card_Effect_Init()
+    {
+        ignore_equipment = false;    //장치
+        ignore_tool = false;      //도구
+        ignore_action = false;  //돌발
+
+        player_damage = 0;
+        player_heal = 0;
+        deck_damage = 0;
+        forced_move_turn = 0;
+        ban_move_turn = 0;
+        ban_use_card_turn = 0;
+    }
+
+    public void test_effect(int effect_idx)
+    {
+        Debug.Log(effect_idx + "번 효과 발동");
+        active_card_effect(effect_idx);
+    }
+
     #region 카드 사용 함수
     void active_card_enqueue(Card card)
     {
@@ -56,7 +76,9 @@ public class CardEffect : MonoBehaviour {
 
         result_card_effect();
 
-        GameManager.gameManager.SendMessage("next_phase");
+        Card_Effect_Init();
+
+        GameManager.gameManager.SendMessage("next_phase","card_effect");
     }
 
     #endregion

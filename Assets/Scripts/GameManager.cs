@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+enum game_phase
+{
+    none = 0,
+    turn_start = 1,
+    enter = 2,  //진입
+    action = 3, //행동
+    maintenence = 4,    //정비
+    departure = 5,   //이탈
+    turn_end = 6
+}
 
-    enum game_phase
-    {
-        none = 0,
-        turn_start = 1,
-        enter = 2,  //진입
-        action = 3, //행동
-        maintenence = 4,    //정비
-        departure = 5,   //이탈
-        turn_end = 6
-    }
+public class GameManager : MonoBehaviour {
 
     public static GameManager gameManager;
 
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour {
                 next_game_phase = game_phase.action;
 
                 //일단 임시로
-                next_phase();
+                next_phase("enter progress");
                 break;
 
             case game_phase.action:
@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour {
         inhand.SendMessage("turn_start");
 
         //일단 임시로
-        next_phase();
+        next_phase("turn_start_phase");
         yield return null;
     }
 
@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour {
         else
         {
             Debug.Log("이동불가로 인해 이동 할 수 없음");
-            next_phase();
+            next_phase("departure_phase");
         }
         yield return null;
     }
@@ -167,7 +167,7 @@ public class GameManager : MonoBehaviour {
         inhand.SendMessage("turn_end");
 
         //일단 임시로
-        next_phase();
+        next_phase("turn_end_phase");
         yield return null;
     }
     #endregion
@@ -187,8 +187,21 @@ public class GameManager : MonoBehaviour {
     }
     #endregion
 
-    void next_phase()
+    void next_phase(string test)
     {
+        Debug.Log(test + "에서 시작");
+
+        now_game_phase = next_game_phase;
+
+        Debug.Log("페이즈 시작 - " + now_game_phase);
+
+        phase_progress();
+    }
+
+    void forced_phase(game_phase game_Phase)
+    {
+        next_game_phase = game_Phase;
+
         now_game_phase = next_game_phase;
 
         Debug.Log("페이즈 시작 - " + now_game_phase);
@@ -203,41 +216,51 @@ public class GameManager : MonoBehaviour {
 
     void message_player_damage(int damage)
     {
+        Debug.Log("메세지 받음 - 플레이어 " + damage + "데미지");
         player.SendMessage("Apply_damage", damage);
     }
 
     void message_player_heal(int heal)
     {
+        Debug.Log("메세지 받음 - 플레이어 " + heal + "힐");
         player.SendMessage("Restore_hp", heal);
     }
 
     void message_deck_damage(int damage)
     {
+        Debug.Log("메세지 받음 - 덱 " + damage + "데미지");
         deck.SendMessage("deck_apply_damage", damage);
     }
 
     void message_forced_move(int turn)
     {
+        Debug.Log("메세지 받음 - 강제이동 " + turn + "턴 전");
         map.SendMessage("forced_move_room", turn);
     }
 
     void message_ban_move(int turn)
     {
+        Debug.Log("메세지 받음 - 이동 불가 " + turn + "턴");
         player.SendMessage("ban_move", turn);
     }
 
     void message_ban_use_card(int turn)
     {
+        Debug.Log("메세지 받음 - 카드 사용 불가 " + turn + "턴");
         inhand.SendMessage("ban_use_card", turn);
     }
 
     void now_player_state(bool move_ban)
     {
+        if(move_ban)
+            Debug.Log("이동 밴");
         is_ban_move = move_ban;
     }
 
     void now_inhand_state(bool use_card_ban)
     {
+        if(use_card_ban)
+            Debug.Log("카드 밴");
         is_ban_use_card = use_card_ban;
     }
 }

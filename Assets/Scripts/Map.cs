@@ -13,11 +13,14 @@ public class Map : MonoBehaviour {
 
     bool is_active_map = false;
 
+    bool is_forced_move = false;
+
     List<int> user_path_room_idx_list = new List<int>();
     #endregion
 
     void move_map_start()
     {
+        Debug.Log("이동 시작");
         is_active_map = true;
     }
 
@@ -60,7 +63,15 @@ public class Map : MonoBehaviour {
         now_room.SendMessage("change_room_output", go_temp_room_arr);
 
         is_active_map = false;
-        GameManager.gameManager.SendMessage("next_phase");
+
+        if (is_forced_move)
+        {
+            GameManager.gameManager.SendMessage("forced_phase", game_phase.turn_end);
+        }
+        else
+        {
+            GameManager.gameManager.SendMessage("next_phase", "map");
+        }
     }
 
     void check_finish_room()
@@ -82,6 +93,9 @@ public class Map : MonoBehaviour {
 
     void forced_move_room(int turn)
     {
+        Debug.Log(turn + "턴 전 방으로 이동");
+        is_forced_move = true;
+
         int path_room_idx_list_cnt = user_path_room_idx_list.Count;
         int turn_cnt_calc = turn + 1;
 
@@ -94,12 +108,16 @@ public class Map : MonoBehaviour {
                 user_path_room_idx_list.RemoveAt(path_room_idx_list_cnt - turn_cnt_calc + i);
             }
 
+            Debug.Log(forced_move_room_idx + "번 방으로 왔음");
+            is_active_map = true;
             move_user_pos(forced_move_room_idx);
         }
         else
         {
             user_path_room_idx_list.Clear();
-            //첫방으로
+
+            Debug.Log("첫방으로 왔음");
+            is_active_map = true;
             move_user_pos(0);
         }
     }

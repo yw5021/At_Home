@@ -26,6 +26,7 @@ public class Player : MonoBehaviour {
 
             if(ban_move_turn_cnt <= 0)
             {
+                Debug.Log("이동 불가 해제");
                 is_ban_move = false;
             }
         }
@@ -33,9 +34,11 @@ public class Player : MonoBehaviour {
 
     void ban_move(int turn)
     {
+        Debug.Log("이동불가 " + turn + "턴 효과 적용");
         is_ban_move = true;
 
         ban_move_turn_cnt = turn;
+        GameManager.gameManager.SendMessage("now_player_state", is_ban_move);
     }
 
     #region 체력 데이터 증감

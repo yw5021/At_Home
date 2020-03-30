@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #region 룸 데이터 구조체
-struct room_info
+public struct room_info
 {
     Card apply_card;    //방에 적용된 카드
     int[] connect_room_idx_arr;    //연결된 방
@@ -25,7 +25,6 @@ struct room_info
         return connect_room_idx_arr;
     }
 }
-
 #endregion
 
 public class Room : MonoBehaviour {
@@ -35,6 +34,7 @@ public class Room : MonoBehaviour {
     public int _room_idx;
 
     room_info info;
+    public room_info _info;
 
     #endregion
 
@@ -42,37 +42,7 @@ public class Room : MonoBehaviour {
     void room_init()
     {
         room_idx = _room_idx;
-
-        Card apply_card;
-        int[] connect_room_idx_arr;
-        switch (room_idx)
-        {
-            case 0:
-                apply_card = null;
-                connect_room_idx_arr = new int[2] { 1 , 2 };
-
-                info = new room_info(apply_card, connect_room_idx_arr);
-                break;
-
-            case 1:
-                apply_card = null;
-                connect_room_idx_arr = new int[2] { 0, 2 };
-
-                info = new room_info(apply_card, connect_room_idx_arr);
-                break;
-
-            case 2:
-                apply_card = null;
-                connect_room_idx_arr = new int[2] { 0, 1 };
-
-                info = new room_info(apply_card, connect_room_idx_arr);
-                break;
-
-
-            default:
-                Debug.Log("error 62351 - 룸 인덱스값 설정 이상");
-                break;
-        }
+        info = _info;
     }
 
     public void move_room(int path_num)
@@ -118,9 +88,33 @@ public class Room : MonoBehaviour {
     }
 
     #endregion
+
     private void Awake()
     {
-        room_init();
-    }
+        Card apply_card = null;
+        int[] connect_room_idx_arr = new int[0];
+        switch (room_idx)
+        {
+            case 0:
+                apply_card = null;
+                connect_room_idx_arr = new int[2] { 1, 2 };
+                break;
 
+            case 1:
+                apply_card = null;
+                connect_room_idx_arr = new int[2] { 0, 2 };
+                break;
+
+            case 2:
+                apply_card = null;
+                connect_room_idx_arr = new int[2] { 0, 1 };
+                break;
+
+
+            default:
+                Debug.Log("error 62351 - 룸 인덱스값 설정 이상");
+                break;
+        }
+        info = new room_info(apply_card, connect_room_idx_arr);
+    }
 }

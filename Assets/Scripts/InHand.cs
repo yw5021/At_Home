@@ -117,7 +117,7 @@ public class InHand : MonoBehaviour {
 
         Destroy(temp_card.gameObject);
 
-        now_hand_card_list.RemoveAt(select_num);
+        now_hand_card_list.Remove(temp_card);
 
         hand_card_cnt--;
     }
@@ -149,6 +149,7 @@ public class InHand : MonoBehaviour {
     {
         //이쪽 부근 코드 나중에 정리(구현)
 
+        Debug.Log("카드 선택 시작");
         is_active_inhand = true;
 
         int now_card_cnt = now_hand_card_list.Count;
@@ -184,7 +185,7 @@ public class InHand : MonoBehaviour {
             Debug.Log("손패 수 이상 없음");
         }
 
-        GameManager.gameManager.SendMessage("next_phase");
+        GameManager.gameManager.SendMessage("next_phase","abandon_card_hand");
     }
 
     void abandon_card_but_event()
@@ -205,7 +206,7 @@ public class InHand : MonoBehaviour {
         }
         else
         {
-            GameManager.gameManager.SendMessage("next_phase");
+            GameManager.gameManager.SendMessage("next_phase","abandon_card_start");
         }
     }
 
