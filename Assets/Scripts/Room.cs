@@ -65,6 +65,7 @@ public class Room : MonoBehaviour {
         GameObject.FindGameObjectWithTag("Map").SendMessage("move_user_pos", room_idx);
     }
 
+    /*
     void change_room_output(GameObject[] go_room_arr)
     {
         GameObject go_now_room = go_room_arr[0];
@@ -73,6 +74,7 @@ public class Room : MonoBehaviour {
         go_prev_room.SetActive(false);
         go_now_room.SetActive(true);
     }
+    */
 
     void active_apply_card()
     {
@@ -88,33 +90,4 @@ public class Room : MonoBehaviour {
     }
 
     #endregion
-
-    private void Awake()
-    {
-        Card apply_card = null;
-        int[] connect_room_idx_arr = new int[0];
-        switch (room_idx)
-        {
-            case 0:
-                apply_card = null;
-                connect_room_idx_arr = new int[2] { 1, 2 };
-                break;
-
-            case 1:
-                apply_card = null;
-                connect_room_idx_arr = new int[2] { 0, 2 };
-                break;
-
-            case 2:
-                apply_card = null;
-                connect_room_idx_arr = new int[2] { 0, 1 };
-                break;
-
-
-            default:
-                Debug.Log("error 62351 - 룸 인덱스값 설정 이상");
-                break;
-        }
-        info = new room_info(apply_card, connect_room_idx_arr);
-    }
 }

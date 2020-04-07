@@ -6,19 +6,21 @@ public class RoomCreator : MonoBehaviour {
 
     public GameObject[] Go_Room_Prefab_Arr;
 
-    public void Room_Create(int idx)
+    public Room Room_Create(int idx)
     {
         //카드 오브젝트 생성해서
-        GameObject Go_Room = Instantiate(Go_Room_Prefab_Arr[idx]);
+        GameObject Go_Room = Instantiate(Go_Room_Prefab_Arr[idx],GameObject.Find("Room").transform);
 
-        Room Temp_Room = Go_Room.GetComponent<Room>();
+        Room Now_Room = Go_Room.GetComponent<Room>();
 
         //카드쪽에서 init해주는 부분 가져올 것
-        Temp_Room._room_idx = idx;
+        Now_Room._room_idx = idx;
 
-        Temp_Room._info = Room_Info_Init(idx);
+        Now_Room._info = Room_Info_Init(idx);
 
-        Temp_Room.SendMessage("room_init");
+        Now_Room.SendMessage("room_init");
+
+        return Now_Room;
     }
 
     room_info Room_Info_Init(int room_idx)

@@ -7,6 +7,9 @@ public class Map : MonoBehaviour {
     #region 맵 데이터 값
     public GameObject[] go_room_arr;
 
+    RoomCreator roomCreator;
+    Room now_room;
+
     //Room[] map_arr;
     int finish_room_idx = 100;
     int now_user_room_idx;
@@ -27,10 +30,11 @@ public class Map : MonoBehaviour {
     //맵 구성해주는 함수
     void map_init()
     {
-        //일단 임시로 켬
-        go_room_arr[0].SetActive(true);
+        roomCreator = GameObject.FindGameObjectWithTag("RoomCreator").GetComponent<RoomCreator>();
 
         now_user_room_idx = 0;
+
+        now_room = roomCreator.Room_Create(now_user_room_idx);
 
         user_path_room_idx_list.Add(now_user_room_idx);
     }
@@ -45,22 +49,20 @@ public class Map : MonoBehaviour {
 
         Debug.Log(room_idx + "번 방으로 이동");
 
-        GameObject go_prev_room = go_room_arr[now_user_room_idx];
-        GameObject go_now_room = go_room_arr[room_idx];
-
-        GameObject[] go_temp_room_arr = new GameObject[2] { go_now_room, go_prev_room};
-
         //맵에서 현재 좌표값 옮겨주고
         now_user_room_idx = room_idx;
 
+        //움직인 경로 저장
         user_path_room_idx_list.Add(now_user_room_idx);
+
+        //이전 방 지워주고
+        Destroy(now_room.gameObject);
+
+        //새방 생성
+        now_room = roomCreator.Room_Create(now_user_room_idx);
 
         check_finish_room();
 
-        //룸쪽에 룸이동 함수 사용
-        Room now_room = go_prev_room.GetComponent<Room>();
-
-        now_room.SendMessage("change_room_output", go_temp_room_arr);
 
         is_active_map = false;
 
@@ -84,10 +86,6 @@ public class Map : MonoBehaviour {
 
     public Room return_now_room()
     {
-        GameObject go_now_room = go_room_arr[now_user_room_idx];
-
-        Room now_room = go_now_room.GetComponent<Room>();
-
         return now_room;
     }
 

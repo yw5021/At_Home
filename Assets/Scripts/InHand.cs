@@ -63,6 +63,8 @@ public class InHand : MonoBehaviour {
         now_hand_card_list.Add(temp_card);
 
         hand_card_cnt++;
+
+        card_list_update();
     }
 
     #endregion
@@ -120,6 +122,8 @@ public class InHand : MonoBehaviour {
         now_hand_card_list.Remove(temp_card);
 
         hand_card_cnt--;
+
+        card_list_update();
     }
 
     public void conf_active_card_inHand()
@@ -148,11 +152,24 @@ public class InHand : MonoBehaviour {
     void select_card_start()
     {
         //이쪽 부근 코드 나중에 정리(구현)
-
         Debug.Log("카드 선택 시작");
         is_active_inhand = true;
 
+        card_list_update();
+    }
+
+    void card_list_update()
+    {
         int now_card_cnt = now_hand_card_list.Count;
+
+        if(now_card_cnt > hand_card_cnt_limit + 4)
+        {
+            Debug.Log("error 32620 - ui 이상의 카드 수 감지");
+        }
+        else if(now_card_cnt > hand_card_cnt_limit)
+        {
+            now_card_cnt = hand_card_cnt_limit;
+        }
 
         Debug.Log("손에 " + now_card_cnt + "장 있음");
 
@@ -165,8 +182,6 @@ public class InHand : MonoBehaviour {
         {
             active_card_but_arr[j].gameObject.SetActive(true);
         }
-
-
     }
 
     #endregion

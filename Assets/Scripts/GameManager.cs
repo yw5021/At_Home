@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour {
     bool is_ban_move = false;
     bool is_ban_use_card = false;
 
+    float Time_Limit = 0;
+
     void Awake()
     {
         gameManager = this;
@@ -114,6 +116,7 @@ public class GameManager : MonoBehaviour {
         {
             inhand.SendMessage("select_card_start");
 
+            StartCoroutine("Time_limit_action");
             yield return StartCoroutine("progress_wait");
         }
         else
@@ -178,6 +181,26 @@ public class GameManager : MonoBehaviour {
     {
         progress_waiting = true;
         yield return new WaitWhile(() => progress_waiting);
+
+        StopCoroutine("Time_limit_action");
+    }
+
+    IEnumerator Time_limit_action()
+    {
+        Debug.Log("시간 제한 시작");
+
+        Time_Limit = 0f;
+
+        while(Time_Limit < 10f)
+        {
+            Time_Limit += 1;
+            Debug.Log(10 - Time_Limit + "초 남음");
+            yield return new WaitForSeconds(1f);
+        }
+
+        Debug.Log("시간 초과");
+
+        inhand.conf_active_card_inHand();
     }
 
     void progress_wait_end()
