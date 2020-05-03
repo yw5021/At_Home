@@ -7,12 +7,12 @@ using UnityEngine.UI;
 public struct room_info
 {
     Card apply_card;    //방에 적용된 카드
-    int[] connect_room_idx_arr;    //연결된 방
+    int[] Path_idx_arr;    //연결된 방
 
-    public room_info(Card _apply_card, int[] _connect_room_idx_arr)
+    public room_info(Card _apply_card, int[] _Path_idx_arr)
     {
         apply_card = _apply_card;
-        connect_room_idx_arr = _connect_room_idx_arr;
+        Path_idx_arr = _Path_idx_arr;
     }
 
     public Card return_apply_card()
@@ -20,9 +20,9 @@ public struct room_info
         return apply_card;
     }
 
-    public int[] return_connect_room_idx_arr()
+    public int[] return_path_idx_arr()
     {
-        return connect_room_idx_arr;
+        return Path_idx_arr;
     }
 }
 #endregion
@@ -47,12 +47,21 @@ public class Room : MonoBehaviour {
 
     public void move_room(int path_num)
     {
-        Debug.Log(path_num + "번 통로 선택");
+        Debug.Log(path_num + "번째 통로 선택");
 
         //어느 방으로 가는지 탐색 후
-        int[] connect_room_idx_arr = info.return_connect_room_idx_arr();
+        int[] Path_idx_arr = info.return_path_idx_arr();
 
-        int room_idx = connect_room_idx_arr[path_num];
+        int Select_path_idx = Path_idx_arr[path_num];
+
+        Debug.Log(Select_path_idx + "번 통로가 선택됨");
+
+        //이 부분 조금 수정 해야될듯
+        Path path_comp = GameObject.FindGameObjectWithTag("Path").GetComponent<Path>();
+
+        Path_info path_info = path_comp.return_path_info(Select_path_idx);
+
+        int room_idx = path_info.return_Connect_room_idx();
 
         /*
         if(room_idx == null)

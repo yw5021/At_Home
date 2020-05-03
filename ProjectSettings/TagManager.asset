@@ -11,6 +11,7 @@ TagManager:
   - InHand
   - CardCreator
   - RoomCreator
+  - Path
   layers:
   - Default
   - TransparentFX

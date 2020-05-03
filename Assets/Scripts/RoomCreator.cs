@@ -26,22 +26,22 @@ public class RoomCreator : MonoBehaviour {
     room_info Room_Info_Init(int room_idx)
     {
         Card apply_card = null;
-        int[] connect_room_idx_arr = new int[0];
+        int[] Path_idx_arr = new int[0];
         switch (room_idx)
         {
             case 0:
                 apply_card = null;
-                connect_room_idx_arr = new int[2] { 1, 2 };
+                Path_idx_arr = new int[2] { 2, 3 };
                 break;
 
             case 1:
                 apply_card = null;
-                connect_room_idx_arr = new int[2] { 0, 2 };
+                Path_idx_arr = new int[2] { 1, 3 };
                 break;
 
             case 2:
                 apply_card = null;
-                connect_room_idx_arr = new int[2] { 0, 1 };
+                Path_idx_arr = new int[2] { 1, 2 };
                 break;
 
 
@@ -49,7 +49,7 @@ public class RoomCreator : MonoBehaviour {
                 Debug.Log("error 62351 - 룸 인덱스값 설정 이상");
                 break;
         }
-        room_info info = new room_info(apply_card, connect_room_idx_arr);
+        room_info info = new room_info(apply_card, Path_idx_arr);
 
         return info;
     }
